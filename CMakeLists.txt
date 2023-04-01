@@ -13,6 +13,7 @@ set(SOURCES
     src/main.cpp
     src/game.cpp
     src/templates.cpp
+    src/checkers.cpp
 )
 
 # Add an executable with the above sources
