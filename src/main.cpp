@@ -4,14 +4,16 @@
 
 #include "game.h"
 
-int main(int argc, char *argv[]) {
+
+int main(int argc, char *argv[])
+{
 
     game game(640, 640);
 
     game.init();
-    game.draw_board();
-    game.loop();
-    
+    game.draw_board(true);
+    game.events();
+
 
     return 0;
 }
