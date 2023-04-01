@@ -26,7 +26,6 @@ void game::draw_board(bool first_player)
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     }
 
-
     for (int i = 0; i < 8; i++)
     {
         for (int j = 0; j < 8; j++)
@@ -39,8 +38,10 @@ void game::draw_board(bool first_player)
         }
     }
     
-    
-
+    //right menu screen
+    SDL_SetRenderDrawColor(renderer, 0, 102, 0, 255);
+    SDL_Rect menu_rect = {640, 0, 360, 640};
+    SDL_RenderFillRect(renderer, &menu_rect);
 
     SDL_RenderPresent(renderer);
 }
@@ -67,8 +68,13 @@ void game::events()
                     pos_xy[1] = event.button.y;
 
                     //rectangle position from 0 - 7
+                    if (pos_xy[0]>=640 || pos_xy[1]>=640)
+                        break;//if in menu screen
+                    
                     rect_xy[0] = pos_xy[0] / 80;
                     rect_xy[1] = pos_xy[1] / 80;
+
+                    std::cout << rect_xy[0] << rect_xy[1] << std::endl;
                 }
             default:
                 break;
