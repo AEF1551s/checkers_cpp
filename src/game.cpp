@@ -12,7 +12,14 @@ game::game(SDL_Window *window, SDL_Renderer *renderer)
 
 void game::init_game_state(bool first_player)
 {
-    init_game_state_templ<true>(game_state);
+    if (first_player)
+    {
+        init_game_state_templ<true>(game_state);
+    }
+    else
+    {
+        init_game_state_templ<false>(game_state);
+    }
 }
 
 void game::draw_board(bool first_player)
