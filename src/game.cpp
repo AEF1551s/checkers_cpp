@@ -67,6 +67,7 @@ void game::game_loop()
     // Game loop
     SDL_bool done = SDL_FALSE;
     init_game_state(true);
+    // TODO: Add option to change first player
     while (!done)
     {
         // Gets input from mouse to rect_xy
