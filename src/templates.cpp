@@ -1,5 +1,5 @@
 template <bool first_player>
-void init_game_state(int (&game_state)[8][8])
+void init_game_state_templ(int (&game_state)[8][8])
 {
     if (first_player)
     {
