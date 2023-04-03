@@ -14,7 +14,7 @@ set(SOURCES
     src/game.cpp
     src/templates.cpp
     src/checkers.cpp
-    src/button.cpp
+    # src/button.cpp
     src/texture_loader.cpp
 )
 
