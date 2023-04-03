@@ -1,9 +1,9 @@
-#include "texture_loader.h"
+#include "texture_manager.h"
 
-std::vector<SDL_Texture *> texture_loader::list_textures_loaded;
-const std::string texture_loader::ASSETS_PATH = "assets/";
+std::vector<SDL_Texture *> texture_manager::list_textures_loaded;
+const std::string texture_manager::ASSETS_PATH = "assets/";
 
-SDL_Texture *texture_loader::load_texture(std::string filename, SDL_Renderer *renderer)
+SDL_Texture *texture_manager::load_texture(std::string filename, SDL_Renderer *renderer)
 {
     // Setup the relative file_path to the images folder using the input filename.
     std::string file_path = ASSETS_PATH + filename;
@@ -32,7 +32,7 @@ SDL_Texture *texture_loader::load_texture(std::string filename, SDL_Renderer *re
     return nullptr;
 }
 
-void texture_loader::deallocate_textures()
+void texture_manager::deallocate_textures()
 {
     // Destroy all the textures on the list.
     while (list_textures_loaded.size() > 0)

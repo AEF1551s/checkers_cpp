@@ -1,11 +1,11 @@
-#if !defined(TEXTURE_LOADER_H)
-#define TEXTURE_LOADER_H
+#if !defined(TEXTURE_MANAGER_H)
+#define TEXTURE_MANAGER_H
 
 #include <string>
 #include <vector>
 #include <SDL2/SDL.h>
 
-class texture_loader
+class texture_manager
 {
 private:
     static std::vector<SDL_Texture *> list_textures_loaded;
@@ -17,4 +17,4 @@ public:
     
 };
 
-#endif // TEXTURE_LOADER_H
+#endif // TEXTURE_MANAGER_H
