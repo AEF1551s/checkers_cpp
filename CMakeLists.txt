@@ -16,6 +16,7 @@ set(SOURCES
     src/game_board.cpp
     src/game_manager.cpp
     src/texture_manager.cpp
+    src/game_state.cpp
 )
 
 # Add an executable with the above sources
