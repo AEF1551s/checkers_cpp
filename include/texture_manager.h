@@ -5,6 +5,7 @@
 #include <vector>
 #include <SDL2/SDL.h>
 
+//Loads .bmp images as textures and saves them in list_textures_loaded and return the current texture for use.
 class texture_manager
 {
 private:
