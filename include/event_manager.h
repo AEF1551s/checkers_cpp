@@ -6,7 +6,6 @@
 class event_manager
 {
 private:
-    int rect_xy[2];
     int pos_x, pos_y;
     int rect_x, rect_y;
     
