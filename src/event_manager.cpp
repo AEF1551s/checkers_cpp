@@ -10,7 +10,8 @@ void event_manager::events(SDL_bool &done)
     SDL_bool event_loop_done = SDL_FALSE;
     done = SDL_FALSE;
     SDL_Event event;
-    
+    // TODO: ADD player 1 and player 2 input events.
+    // IF its players move, then do this, if its computers move, do computer class stuff.
     do
     {
         if (SDL_PollEvent(&event) != 0)
@@ -27,6 +28,13 @@ void event_manager::events(SDL_bool &done)
                     handle_click(event.button.x, event.button.y);
                     // TODO: Show possible moves, if pressed on a piece.
                     // TODO: If pressed on possible move, update game_state
+                    /*
+                    TODO: if pressed second time, check if allowed, and move piece,
+                    change gamestate::game_state array. set event_loop_done = true
+                    otherwise event_loop_done = false, so there is no need to update the pieces on the table
+                    if nothing has moved.
+                    */
+
                     event_loop_done = SDL_TRUE;
                 }
                 break;
