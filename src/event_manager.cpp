@@ -11,31 +11,58 @@ void event_manager::events(SDL_bool &done)
     done = SDL_FALSE;
     SDL_Event event;
 
-    while ((SDL_PollEvent(&event) != 0 && !done) || !event_loop_done)
+    // while ((SDL_PollEvent(&event) != 0 && !done) || !event_loop_done)
+    // {
+    //     switch (event.type)
+    //     {
+    //     case SDL_QUIT:
+    //         done = SDL_TRUE;
+    //         event_loop_done = SDL_TRUE;
+    //         break;
+
+    //     case SDL_MOUSEBUTTONDOWN:
+    //         if (event.button.button == SDL_BUTTON_LEFT)
+    //         {
+    //             handle_click(event.button.x, event.button.y);
+
+    //             // TODO: Show possible moves, if pressed on a piece.
+    //             // TODO: If pressed on possible move, update game_state
+    //             event_loop_done = SDL_TRUE;
+    //         }
+    //         break;
+    //         // TODO: Add button to reset, quit, change first player
+    //     default:
+    //         // event_loop_done = false; if this is left, then code breaks.
+    //         break;
+    //     }
+    // }
+
+    do
     {
-        switch (event.type)
+        if (SDL_PollEvent(&event) != 0)
         {
-        case SDL_QUIT:
-            done = SDL_TRUE;
-            event_loop_done = SDL_TRUE;
-            break;
-
-        case SDL_MOUSEBUTTONDOWN:
-            if (event.button.button == SDL_BUTTON_LEFT)
+            switch (event.type)
             {
-                handle_click(event.button.x, event.button.y);
-
-                // TODO: Show possible moves, if pressed on a piece.
-                // TODO: If pressed on possible move, update game_state
+            case SDL_QUIT:
+                done = SDL_TRUE;
                 event_loop_done = SDL_TRUE;
-            }
-            break;
+                break;
+            case SDL_MOUSEBUTTONDOWN:
+                if (event.button.button == SDL_BUTTON_LEFT)
+                {
+                    handle_click(event.button.x, event.button.y);
+                    // TODO: Show possible moves, if pressed on a piece.
+                    // TODO: If pressed on possible move, update game_state
+                    event_loop_done = SDL_TRUE;
+                }
+                break;
             // TODO: Add button to reset, quit, change first player
-        default:
-            // event_loop_done = false; if this is left, then code breaks.
-            break;
+            default:
+                // event_loop_done = false; if this is left, then code breaks.
+                break;
+            }
         }
-    }
+    } while (!done && !event_loop_done);
 }
 
 void event_manager::handle_click(int x, int y)
