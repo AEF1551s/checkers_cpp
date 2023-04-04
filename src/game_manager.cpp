@@ -36,10 +36,10 @@ void game_manager::game_loop()
     while (!done)
     {
         // TODO: Add option to change first player
+        //FIXME: events sometimes goes out of 
         event_manager.events(done);
-        
-        std::cout << "test" << std::endl;
-        // game_board.render_game_state();
+        std::cout<< "test" << std::endl;
+        game_board.render_game_state();
     }
 
     SDL_DestroyRenderer(renderer);
