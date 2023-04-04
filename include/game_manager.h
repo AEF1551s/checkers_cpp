@@ -4,6 +4,8 @@
 #include "templates.h"
 #include <SDL2/SDL.h>
 
+//Manages the game_loop
+//TODO: Update game_state based on played mode
 class game_manager
 {
 private:
