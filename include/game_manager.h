@@ -4,6 +4,10 @@
 #include "templates.h"
 #include <SDL2/SDL.h>
 
+#include "game_window.h"
+#include "event_manager.h"
+#include "game_board.h"
+
 //Manages the game_loop
 //TODO: Update game_state based on played mode
 class game_manager
