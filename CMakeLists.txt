@@ -11,13 +11,11 @@ set (CMAKE_CXX_STANDARD 23)
 # Create a sources variable with a link to all cpp files to compile
 set(SOURCES
     src/main.cpp
-    # src/game.cpp
-    # src/checkers.cpp
-    src/texture_manager.cpp
     src/game_window.cpp
     src/event_manager.cpp
     src/game_board.cpp
     src/game_manager.cpp
+    src/texture_manager.cpp
 )
 
 # Add an executable with the above sources
