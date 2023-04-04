@@ -16,6 +16,7 @@ set(SOURCES
     src/checkers.cpp
     src/texture_manager.cpp
     src/game_window.cpp
+    src/event_manager.cpp
 )
 
 # Add an executable with the above sources
