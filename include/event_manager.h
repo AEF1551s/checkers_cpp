@@ -6,16 +6,16 @@
 class event_manager
 {
 private:
-    int pos_x, pos_y;
     int rect_x, rect_y;
-    
+
 public:
-    event_manager(/* args */);
+    event_manager();
     void events(SDL_bool &done);
-    void handle_click(int x, int y);
+    void events(SDL_bool &done, SDL_bool &reset);
+    void events(SDL_bool &done, SDL_bool &reset, bool &first_player);
+    void handle_click(int x, int y, SDL_bool &reset);
+    bool handle_reset_click(int x, int y, SDL_bool &reset, bool &first_player);
+    bool check_button_press(int mouse_x, int mouse_y, int x, int y, int w, int h);
 };
-
-
-
 
 #endif // event_manager_H

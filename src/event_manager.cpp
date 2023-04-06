@@ -7,9 +7,24 @@ event_manager::event_manager()
 
 void event_manager::events(SDL_bool &done)
 {
+    SDL_bool reset = SDL_FALSE;
+    bool first_player = NULL;
+    events(done, reset, first_player);
+}
+
+void event_manager::events(SDL_bool &done, SDL_bool &reset)
+{
+    bool first_player = NULL;
+    events(done, reset, first_player);
+}
+
+void event_manager::events(SDL_bool &done, SDL_bool &reset, bool &first_player)
+{
+
     SDL_bool event_loop_done = SDL_FALSE;
-    done = SDL_FALSE;
+
     SDL_Event event;
+
     // TODO: ADD player 1 and player 2 input events.
     // IF its players move, then do this, if its computers move, do computer class stuff.
     do
@@ -25,7 +40,16 @@ void event_manager::events(SDL_bool &done)
             case SDL_MOUSEBUTTONDOWN:
                 if (event.button.button == SDL_BUTTON_LEFT)
                 {
-                    handle_click(event.button.x, event.button.y);
+
+                    if (!reset)
+                    {
+                        handle_click(event.button.x, event.button.y, reset);
+                        event_loop_done = SDL_TRUE;
+                    }
+                    else if (handle_reset_click(event.button.x, event.button.y, reset, first_player))
+                        event_loop_done = SDL_TRUE;
+
+
                     // TODO: Show possible moves, if pressed on a piece.
                     // TODO: If pressed on possible move, update game_state
                     /*
@@ -34,8 +58,6 @@ void event_manager::events(SDL_bool &done)
                     otherwise event_loop_done = false, so there is no need to update the pieces on the table
                     if nothing has moved.
                     */
-
-                    event_loop_done = SDL_TRUE;
                 }
                 break;
             // TODO: Add button to reset, quit, change first player
@@ -46,21 +68,45 @@ void event_manager::events(SDL_bool &done)
     } while (!done && !event_loop_done);
 }
 
-void event_manager::handle_click(int x, int y)
+void event_manager::handle_click(int x, int y, SDL_bool &reset)
 {
-    // Relative position to window
-    pos_x = x;
-    pos_y = y;
-
-    // Rectangle position from 0 - 7
-    if (pos_x >= 640 || pos_y >= 640)
+    // Menu screen
+    if (x >= 640 && x <= 1000 && y >= 0 && y <= 640)
     {
-        // handle menu screen stuff
+        if (check_button_press(x, y, 700, 290, 140, 60))
+            reset = SDL_TRUE;
     }
     else
     {
-        rect_x = pos_x / 80;
-        rect_y = pos_y / 80;
+        // Rectangle position from 0 - 7
+        rect_x = x / 80;
+        rect_y = y / 80;
     }
     std::cout << rect_x << " : " << rect_y << std::endl;
+    std::cout << x << " : " << y << std::endl;
+}
+
+bool event_manager::handle_reset_click(int x, int y, SDL_bool &reset, bool &first_player)
+{
+    if (check_button_press(x, y, 260, 290, 140, 60))
+    {
+        first_player = true;
+        reset = SDL_FALSE;
+        return true;
+    }
+
+    if (check_button_press(x, y, 600, 290, 140, 60))
+    {
+        first_player = false;
+        reset = SDL_FALSE;
+        return true;
+    }
+    return false;
+}
+
+bool event_manager::check_button_press(int mouse_x, int mouse_y, int x, int y, int w, int h)
+{
+    if (mouse_x >= x && mouse_x <= (x + w) && mouse_y >= y && mouse_y <= (y + h))
+        return true;
+    return false;
 }
