@@ -15,16 +15,14 @@ game_board::game_board(SDL_Window &window, SDL_Renderer &renderer)
 
 void game_board::render_game_state()
 {
-    SDL_RenderClear(renderer);
-
     // Render game pieces on board
     for (int i = 0; i < 8; i++)
     {
         std::cout << std::endl;
         for (int j = 0; j < 8; j++)
         {
-            SDL_Rect piece_rect = {i * 80, j * 80, 80, 80};
-
+            SDL_Rect piece_rect = {j * 80, i * 80, 80, 80};
+            //FIXME: need vertical rendering, not horizontal
             int piece = gamestate::game_state[i][j];
             std:: cout << piece;
             switch (piece)
@@ -46,6 +44,7 @@ void game_board::render_game_state()
             }
         }
     }
+    SDL_RenderPresent(renderer);
 }
 
 void game_board::load_textures()

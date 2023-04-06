@@ -15,4 +15,4 @@ public:
     void draw_board(bool first_player);
     ~game_window();
 };
-#endif // GAME_WINDOW_H
+#endif // GAME_WINDOW_Hs

@@ -14,6 +14,7 @@ game_window::~game_window(){
 
 void game_window::draw_board(bool first_player)
 {
+    //TODO: draw buttons - reset, and choose first player
     if (first_player)
     {
         // Set backround colour to black
@@ -49,7 +50,5 @@ void game_window::draw_board(bool first_player)
     SDL_Rect menu_rect = {640, 0, 360, 640};
     SDL_RenderFillRect(renderer, &menu_rect);
 
-    //TODO: Render buttons to choose first or second player, reset game, quit game. 
-
-    SDL_RenderPresent(renderer);
+    //TODO: Render buttons to choose first or second player, reset game, quit game.
 }
