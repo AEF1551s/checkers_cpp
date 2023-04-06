@@ -44,23 +44,21 @@ void event_manager::events(SDL_bool &done, SDL_bool &reset, bool &first_player)
                     if (!reset)
                     {
                         handle_click(event.button.x, event.button.y, reset);
+
+                        // TODO: Show possible moves, if pressed on a piece.
+                        // TODO: If pressed on possible move, update game_state
+                        /*
+            TODO: if pressed second time, check if allowed, and move piece,
+            change gamestate::game_state array. set event_loop_done = true
+            otherwise event_loop_done = false, so there is no need to update the pieces on the table
+            if nothing has moved.
+            */
                         event_loop_done = SDL_TRUE;
                     }
                     else if (handle_reset_click(event.button.x, event.button.y, reset, first_player))
                         event_loop_done = SDL_TRUE;
-
-
-                    // TODO: Show possible moves, if pressed on a piece.
-                    // TODO: If pressed on possible move, update game_state
-                    /*
-                    TODO: if pressed second time, check if allowed, and move piece,
-                    change gamestate::game_state array. set event_loop_done = true
-                    otherwise event_loop_done = false, so there is no need to update the pieces on the table
-                    if nothing has moved.
-                    */
                 }
                 break;
-            // TODO: Add button to reset, quit, change first player
             default:
                 break;
             }
