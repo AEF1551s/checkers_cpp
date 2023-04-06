@@ -7,7 +7,6 @@
 #include "game_state.h"
 
 // Renders game pieces based on game_state
-// TODO: Show possible moves when pressed on game piece
 class game_board
 {
 private:
@@ -16,8 +15,6 @@ private:
 
     static SDL_Texture *texture_black, *texture_black_q,
         *texture_white, *texture_white_q;
-
-    // static int game_state[8][8];
 
 public:
     game_board(SDL_Window &window, SDL_Renderer &renderer);
