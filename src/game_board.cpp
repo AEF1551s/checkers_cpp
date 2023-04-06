@@ -5,7 +5,10 @@
 // int game_board::game_state[8][8];
 
 SDL_Texture *game_board::texture_black, *game_board::texture_black_q,
-    *game_board::texture_white, *game_board::texture_white_q;
+    *game_board::texture_white, *game_board::texture_white_q,
+    *game_board::texture_reset_button, 
+    *game_board::texture_first_player_button, *game_board::texture_second_player_button, 
+    *game_board::texture_you_lost, *game_board::texture_you_won;
 
 game_board::game_board(SDL_Window &window, SDL_Renderer &renderer)
 {
@@ -53,4 +56,9 @@ void game_board::load_textures()
     texture_black_q = texture_manager::load_texture("black_piece_q.bmp", renderer);
     texture_white = texture_manager::load_texture("white_piece.bmp", renderer);
     texture_white_q = texture_manager::load_texture("white_piece_q.bmp", renderer);
+    texture_reset_button = texture_manager::load_texture("reset.bmp", renderer);
+    texture_first_player_button = texture_manager::load_texture("first_player_button.bmp", renderer);
+    texture_second_player_button = texture_manager::load_texture("second_player_button.bmp", renderer);
+    texture_you_lost = texture_manager::load_texture("you_lost.bmp", renderer);
+    texture_you_won = texture_manager::load_texture("you_won.bmp", renderer);
 }
