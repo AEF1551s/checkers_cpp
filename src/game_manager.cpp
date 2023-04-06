@@ -9,14 +9,6 @@ game_manager::game_manager(SDL_Window &window, SDL_Renderer &renderer)
     this->renderer = &renderer;
 }
 
-// void game_manager::init_game_state(bool first_player)
-// {
-//     if (first_player)
-//         init_game_state_templ<true>(game_state);
-//     else
-//         init_game_state_templ<false>(game_state);
-// }
-
 void game_manager::game_loop()
 {
     // Create nessecery objects for game_loop
@@ -25,29 +17,26 @@ void game_manager::game_loop()
     game_board game_board(*window, *renderer);
 
     SDL_bool done = SDL_FALSE;
-    bool first_player = true;
+    SDL_bool reset = SDL_TRUE;
+    bool first_player = false;
 
     // Load piece textures
     game_board.load_textures();
-
-    gamestate::init_game_state(first_player);
-
-    // Render starting game piece textures
-    game_window.draw_board(first_player);
-    game_board.render_game_state();
-
-    //bool chosen_player;
-    // draw ask signs, and ask if first player.
-    //  
-    //     //Create and render window
+    // Load reset and player button textures
+    game_window.load_textures();
 
     while (!done)
-    {
-        // TODO: Add option to change first player
-    
-        event_manager.events(done);
+    { // Draws reset window with buttons
+        while (reset)
+        {
+            game_window.reset();
+            event_manager.events(done, reset, first_player);
+        }
+        gamestate::init_game_state(first_player);
 
-        // game_board.render_game_state();
+        game_window.draw_board(first_player);
+        game_board.render_game_state();
+        event_manager.events(done, reset);
     }
 
     SDL_DestroyRenderer(renderer);
