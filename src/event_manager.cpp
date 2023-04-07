@@ -45,6 +45,11 @@ void event_manager::events(SDL_bool &done, SDL_bool &reset, bool &first_player)
                     {
                         handle_click(event.button.x, event.button.y, reset);
 
+                        if (check_if_clicked_piece())
+                        {
+                            std::cout << "pressed piece " << std::endl;
+                        }
+
                         // TODO: Show possible moves, if pressed on a piece.
                         // TODO: If pressed on possible move, update game_state
                         /*
@@ -56,7 +61,10 @@ void event_manager::events(SDL_bool &done, SDL_bool &reset, bool &first_player)
                         event_loop_done = SDL_TRUE;
                     }
                     else if (handle_reset_click(event.button.x, event.button.y, reset, first_player))
+                    {
+                        gamestate::init_game_state(first_player);
                         event_loop_done = SDL_TRUE;
+                    }
                 }
                 break;
             default:
@@ -68,6 +76,8 @@ void event_manager::events(SDL_bool &done, SDL_bool &reset, bool &first_player)
 
 void event_manager::handle_click(int x, int y, SDL_bool &reset)
 {
+    pos_x = x;
+    pos_y = y;
     // Menu screen
     if (x >= 640 && x <= 1000 && y >= 0 && y <= 640)
     {
@@ -105,6 +115,16 @@ bool event_manager::handle_reset_click(int x, int y, SDL_bool &reset, bool &firs
 bool event_manager::check_button_press(int mouse_x, int mouse_y, int x, int y, int w, int h)
 {
     if (mouse_x >= x && mouse_x <= (x + w) && mouse_y >= y && mouse_y <= (y + h))
+        return true;
+    return false;
+}
+
+bool event_manager::check_if_clicked_piece()
+{
+    if (pos_x > 640)
+        return false;
+
+    if (gamestate::game_state[rect_y][rect_x] != 0)
         return true;
     return false;
 }
