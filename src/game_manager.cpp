@@ -27,16 +27,17 @@ void game_manager::game_loop()
 
     while (!done)
     { // Draws reset window with buttons
-        while (reset)
+        while (reset && !done)
         {
             game_window.reset();
             event_manager.events(done, reset, first_player);
         }
-        gamestate::init_game_state(first_player);
-
-        game_window.draw_board(first_player);
-        game_board.render_game_state();
-        event_manager.events(done, reset);
+        if (!done)
+        {
+            game_window.draw_board(first_player);
+            game_board.render_game_state();
+            event_manager.events(done, reset);
+        }
     }
 
     SDL_DestroyRenderer(renderer);
