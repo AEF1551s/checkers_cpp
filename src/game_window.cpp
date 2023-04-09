@@ -54,16 +54,16 @@ void game_window::draw_board(bool first_player)
     SDL_SetRenderDrawColor(renderer, 0, 102, 0, 255);
     SDL_Rect menu_rect = {640, 0, 360, 640};
     SDL_RenderFillRect(renderer, &menu_rect);
-    //Draw reset button
+    // Draw reset button
     SDL_Rect reset_rect = {700, 290, 140, 60};
     SDL_RenderCopy(renderer, texture_reset_button, NULL, &reset_rect);
-
 }
 
 void game_window::reset()
 {
     // TODO: Render pretty backround, with game name etc.
     // Render black backround
+
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
