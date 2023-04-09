@@ -52,7 +52,10 @@ void event_manager::events(SDL_bool &done, SDL_bool &reset, bool &first_player)
                         if (first_click_on_piece)
                         {
                             if (check_if_possible_move())
-                                player_move = state::update_game_state(next_x, next_y, prev_x, prev_y, player_move);
+                            {
+                                state::update_game_state(next_x, next_y, prev_x, prev_y, player_move);
+                                player_move = !player_move;
+                            }
 
                             event_loop_done = SDL_TRUE;
                             first_click_on_piece = false;
@@ -61,15 +64,17 @@ void event_manager::events(SDL_bool &done, SDL_bool &reset, bool &first_player)
 
                         if (check_if_clicked_piece())
                         {
+                            std::cout << "check clicked " << std::endl;
+
                             possible_moves();
                             first_click_on_piece = true;
                         }
-
                         event_loop_done = SDL_TRUE;
                     }
                     else if (handle_reset_click(event.button.x, event.button.y, reset, first_player))
                     {
                         state::init_game_state(first_player);
+                        player_move = true;
                         event_loop_done = SDL_TRUE;
                     }
                 }
@@ -126,14 +131,14 @@ bool event_manager::check_button_press(int mouse_x, int mouse_y, int x, int y, i
 
 bool event_manager::check_if_clicked_piece()
 {
-    if (pos_x > 640)
+    int piece = state::game_state[rect_x][rect_y];
+
+    if (pos_x > 640 || piece == 0)
         return false;
 
-    if (state::game_state[rect_x][rect_y] != 0)
-    {
-        // std::cout << "clicked piece " << std::endl;
+    if ((player_move && piece == 1) || (!player_move && piece == 2))
         return true;
-    }
+
     return false;
 }
 

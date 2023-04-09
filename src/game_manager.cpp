@@ -21,8 +21,7 @@ void game_manager::game_loop()
     SDL_bool reset = SDL_TRUE;
 
     //1 is for white player, 0 is for black player
-
-    bool first_player = false;
+    bool first_player;
 
     // Load piece textures
     game_board.load_textures();
@@ -35,9 +34,7 @@ void game_manager::game_loop()
         {
             game_window.reset();
             event_manager.events(done, reset, first_player);
-            player_move = first_player;
         }
-        // std::cout << player_move << std::endl;
         if (!done)
         {
             game_window.draw_board(first_player);
