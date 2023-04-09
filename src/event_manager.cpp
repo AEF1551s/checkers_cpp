@@ -1,10 +1,13 @@
 #include "event_manager.h"
 #include <iostream>
+#include <vector>
 
-event_manager::event_manager(SDL_Window &window, SDL_Renderer &renderer)
+event_manager::event_manager(SDL_Window &window, SDL_Renderer &renderer, bool &player_move)
 {
     this->window = &window;
     this->renderer = &renderer;
+    this->player_move = player_move;
+    first_click_on_piece = false;
 }
 
 void event_manager::events(SDL_bool &done)
@@ -22,13 +25,10 @@ void event_manager::events(SDL_bool &done, SDL_bool &reset)
 
 void event_manager::events(SDL_bool &done, SDL_bool &reset, bool &first_player)
 {
-
     SDL_bool event_loop_done = SDL_FALSE;
 
     SDL_Event event;
 
-    // TODO: ADD player 1 and player 2 input events.
-    // IF its players move, then do this, if its computers move, do computer class stuff.
     do
     {
         if (SDL_PollEvent(&event) != 0)
@@ -45,20 +45,26 @@ void event_manager::events(SDL_bool &done, SDL_bool &reset, bool &first_player)
 
                     if (!reset)
                     {
+                        prev_x = rect_x;
+                        prev_y = rect_y;
                         handle_click(event.button.x, event.button.y, reset);
+
+                        if (first_click_on_piece)
+                        {
+                            if (check_if_possible_move())
+                                player_move = state::update_game_state(next_x, next_y, prev_x, prev_y, player_move);
+
+                            event_loop_done = SDL_TRUE;
+                            first_click_on_piece = false;
+                            break;
+                        }
 
                         if (check_if_clicked_piece())
                         {
                             possible_moves();
+                            first_click_on_piece = true;
                         }
 
-                        // TODO: If pressed on possible move, update game_state
-                        /*
-            TODO: if pressed second time, check if allowed, and move piece,
-            change state::game_state array. set event_loop_done = true
-            otherwise event_loop_done = false, so there is no need to update the pieces on the table
-            if nothing has moved.
-            */
                         event_loop_done = SDL_TRUE;
                     }
                     else if (handle_reset_click(event.button.x, event.button.y, reset, first_player))
@@ -131,11 +137,29 @@ bool event_manager::check_if_clicked_piece()
     return false;
 }
 
+bool event_manager::check_if_possible_move()
+{
+    for (auto move : moves)
+    {
+        int mx = move.first;
+        int my = move.second;
+
+        if (rect_y == mx && rect_x == my)
+        {
+            next_x = rect_x;
+            next_y = rect_y;
+            return true;
+        }
+    }
+    return false;
+}
+
 void event_manager::possible_moves()
 {
 
     using namespace state;
 
+    moves.clear();
     // Get the game state and the selected piece's position
     int(*board)[8] = game_state;
 
@@ -149,8 +173,6 @@ void event_manager::possible_moves()
     int opponent = (player == 1) ? 2 : 1;
 
     // Calculate the possible moves for the selected piece
-    std::vector<std::pair<int, int>> moves;
-
     if (player == 1)
     {
         // Check moves for white piece

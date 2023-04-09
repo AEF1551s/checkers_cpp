@@ -16,11 +16,12 @@ void game_board::render_game_state()
     // Render game pieces on board
     for (int i = 0; i < 8; i++)
     {
+        // std::cout<< std::endl;
         for (int j = 0; j < 8; j++)
         {
             SDL_Rect piece_rect = {j * 80, i * 80, 80, 80};
-            int piece = gamestate::game_state[i][j];
-
+            int piece = state::game_state[i][j];
+            // std::cout << piece << " ";
             switch (piece)
             {
             case 1: // white piece

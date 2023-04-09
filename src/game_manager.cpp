@@ -11,15 +11,19 @@ game_manager::game_manager(SDL_Window &window, SDL_Renderer &renderer)
 
 void game_manager::game_loop()
 {
+    bool player_move;
     // Create nessecery objects for game_loop
     game_window game_window(*window, *renderer);
-    event_manager event_manager(*window, *renderer);
+    event_manager event_manager(*window, *renderer, player_move);
     game_board game_board(*window, *renderer);
 
     SDL_bool done = SDL_FALSE;
     SDL_bool reset = SDL_TRUE;
+
+    //1 is for white player, 0 is for black player
+
     bool first_player = false;
-    
+
     // Load piece textures
     game_board.load_textures();
     // Load reset and player button textures
@@ -31,8 +35,9 @@ void game_manager::game_loop()
         {
             game_window.reset();
             event_manager.events(done, reset, first_player);
+            player_move = first_player;
         }
-
+        // std::cout << player_move << std::endl;
         if (!done)
         {
             game_window.draw_board(first_player);

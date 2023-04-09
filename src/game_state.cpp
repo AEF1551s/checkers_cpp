@@ -17,3 +17,15 @@ void state::init_game_state(bool first_player)
         break;
     }
 }
+
+bool state::update_game_state(int next_x, int next_y, int prev_x, int prev_y, bool player_move)
+{
+    int piece = player_move ? 1 : 2;
+
+    game_state[prev_x][prev_y] = 0;
+    game_state[next_x][next_y] = piece;
+
+    player_move = !player_move;
+
+    return player_move;
+}
