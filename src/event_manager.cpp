@@ -1,25 +1,25 @@
 #include "event_manager.h"
 #include <iostream>
 #include <vector>
-
 event_manager::event_manager(SDL_Window &window, SDL_Renderer &renderer, bool &player_move)
 {
     this->window = &window;
     this->renderer = &renderer;
     this->player_move = player_move;
+    rect_x = 0, rect_y = 0;
     first_click_on_piece = false;
 }
 
 void event_manager::events(SDL_bool &done)
 {
     SDL_bool reset = SDL_FALSE;
-    bool first_player = NULL;
+    bool first_player = false;
     events(done, reset, first_player);
 }
 
 void event_manager::events(SDL_bool &done, SDL_bool &reset)
 {
-    bool first_player = NULL;
+    bool first_player = false;
     events(done, reset, first_player);
 }
 
@@ -42,13 +42,12 @@ void event_manager::events(SDL_bool &done, SDL_bool &reset, bool &first_player)
             case SDL_MOUSEBUTTONDOWN:
                 if (event.button.button == SDL_BUTTON_LEFT)
                 {
-
                     if (!reset)
                     {
                         prev_x = rect_x;
                         prev_y = rect_y;
-                        handle_click(event.button.x, event.button.y, reset);
 
+                        handle_click(event.button.x, event.button.y, reset);
                         if (first_click_on_piece)
                         {
                             if (check_if_possible_move())
@@ -61,12 +60,10 @@ void event_manager::events(SDL_bool &done, SDL_bool &reset, bool &first_player)
                             first_click_on_piece = false;
                             break;
                         }
-
                         if (check_if_clicked_piece())
                         {
-                            std::cout << "check clicked " << std::endl;
-
-                            possible_moves();
+                            std::cout <<"event_manager:" << first_player << std::endl;
+                            possible_moves(first_player);
                             first_click_on_piece = true;
                         }
                         event_loop_done = SDL_TRUE;
@@ -106,6 +103,7 @@ void event_manager::handle_click(int x, int y, SDL_bool &reset)
 
 bool event_manager::handle_reset_click(int x, int y, SDL_bool &reset, bool &first_player)
 {
+
     if (check_button_press(x, y, 260, 290, 140, 60))
     {
         first_player = true;
@@ -159,7 +157,7 @@ bool event_manager::check_if_possible_move()
     return false;
 }
 
-void event_manager::possible_moves()
+void event_manager::possible_moves(bool first_player)
 {
 
     using namespace state;
@@ -167,20 +165,25 @@ void event_manager::possible_moves()
     moves.clear();
     // Get the game state and the selected piece's position
     int(*board)[8] = game_state;
-
+    
     int x = rect_y;
     int y = rect_x;
-
-    // std::cout << board[y][x] << " " << x << " " << y << std::endl;
+    int opponent;
 
     // Check if the selected piece is white or black
     int player = board[y][x];
-    int opponent = (player == 1) ? 2 : 1;
+
+    int temp =1;
+    if (!first_player)
+        temp = 2;
+    
+
+    opponent = (player == 1) ? 2 : 1;
 
     // Calculate the possible moves for the selected piece
-    if (player == 1)
+    if (player == temp)
     {
-        // Check moves for white piece
+        // Check moves piece that has possible moves in the up direction
         if (y > 0)
         {
             if (x > 0 && board[y - 1][x - 1] == 0)
@@ -203,7 +206,7 @@ void event_manager::possible_moves()
     }
     else
     {
-        // Check moves for black piece
+        // Check moves for piece that has moves in the down diretion
         if (y < 7)
         {
             if (x > 0 && board[y + 1][x - 1] == 0)

@@ -26,7 +26,7 @@ public:
     void events(SDL_bool &done, SDL_bool &reset);
     void events(SDL_bool &done, SDL_bool &reset, bool &first_player);
     void handle_click(int x, int y, SDL_bool &reset);
-    void possible_moves();
+    void possible_moves(bool first_player);
     bool check_if_clicked_piece();
     bool check_if_possible_move();
     bool handle_reset_click(int x, int y, SDL_bool &reset, bool &first_player);

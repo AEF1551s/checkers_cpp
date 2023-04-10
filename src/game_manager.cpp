@@ -39,8 +39,9 @@ void game_manager::game_loop()
         {
             game_window.draw_board(first_player);
             game_board.render_game_state();
-            event_manager.events(done, reset);
+            event_manager.events(done, reset, first_player);
             SDL_RenderPresent(renderer);
+            std::cout <<"game_manager:" << first_player << std::endl;
         }
     }
 
