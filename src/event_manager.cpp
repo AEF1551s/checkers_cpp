@@ -19,6 +19,7 @@ void event_manager::events(SDL_bool &done)
 
 void event_manager::events(SDL_bool &done, SDL_bool &reset)
 {
+    //TODO: ATM this is not used.
     bool first_player = false;
     events(done, reset, first_player);
 }
@@ -62,7 +63,6 @@ void event_manager::events(SDL_bool &done, SDL_bool &reset, bool &first_player)
                         }
                         if (check_if_clicked_piece())
                         {
-                            std::cout <<"event_manager:" << first_player << std::endl;
                             possible_moves(first_player);
                             first_click_on_piece = true;
                         }
