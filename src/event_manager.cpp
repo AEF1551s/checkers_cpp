@@ -19,7 +19,7 @@ void event_manager::events(SDL_bool &done)
 
 void event_manager::events(SDL_bool &done, SDL_bool &reset)
 {
-    //TODO: ATM this is not used.
+    // TODO: ATM this is not used.
     bool first_player = false;
     events(done, reset, first_player);
 }
@@ -165,66 +165,73 @@ void event_manager::possible_moves(bool first_player)
     moves.clear();
     // Get the game state and the selected piece's position
     int(*board)[8] = game_state;
-    
+
     int x = rect_y;
     int y = rect_x;
     int opponent;
-
+    bool must_take = false;
     // Check if the selected piece is white or black
     int player = board[y][x];
 
-    int temp =1;
+    int temp = 1;
     if (!first_player)
         temp = 2;
-    
 
     opponent = (player == 1) ? 2 : 1;
 
     // Calculate the possible moves for the selected piece
+
     if (player == temp)
     {
-        // Check moves piece that has possible moves in the up direction
         if (y > 0)
         {
-            if (x > 0 && board[y - 1][x - 1] == 0)
+            // Check if opponent is in way. Left and right
+            if (y > 1 && x > 1 && board[y - 1][x - 1] == opponent && board[y - 2][x - 2] == 0)
+            {
+                moves.emplace_back(x - 2, y - 2);
+                must_take = true;
+            }
+            if (y > 1 && x < 6 && board[y - 1][x + 1] == opponent && board[y - 2][x + 2] == 0)
+            {
+                moves.emplace_back(x + 2, y - 2);
+                must_take = true;
+            }
+            // Check UP diagnally left and right.
+            if (!must_take && x > 0 && board[y - 1][x - 1] == 0)
             {
                 moves.emplace_back(x - 1, y - 1);
             }
-            if (x < 7 && board[y - 1][x + 1] == 0)
+            if (!must_take && x < 7 && board[y - 1][x + 1] == 0)
             {
                 moves.emplace_back(x + 1, y - 1);
             }
         }
-        if (y > 1 && x > 1 && board[y - 1][x - 1] == opponent && board[y - 2][x - 2] == 0)
-        {
-            moves.emplace_back(x - 2, y - 2);
-        }
-        if (y > 1 && x < 6 && board[y - 1][x + 1] == opponent && board[y - 2][x + 2] == 0)
-        {
-            moves.emplace_back(x + 2, y - 2);
-        }
     }
     else
     {
-        // Check moves for piece that has moves in the down diretion
-        if (y < 7)
-        {
-            if (x > 0 && board[y + 1][x - 1] == 0)
-            {
-                moves.emplace_back(x - 1, y + 1);
-            }
-            if (x < 7 && board[y + 1][x + 1] == 0)
-            {
-                moves.emplace_back(x + 1, y + 1);
-            }
-        }
+        // Check if opponent is in way. Left and right
         if (y < 6 && x > 1 && board[y + 1][x - 1] == opponent && board[y + 2][x - 2] == 0)
         {
             moves.emplace_back(x - 2, y + 2);
+            must_take = true;
         }
         if (y < 6 && x < 6 && board[y + 1][x + 1] == opponent && board[y + 2][x + 2] == 0)
         {
             moves.emplace_back(x + 2, y + 2);
+            must_take = true;
+        }
+
+        // Check DOWN diagnally left and right.
+        if (y < 7)
+        {
+            if (!must_take && x > 0 && board[y + 1][x - 1] == 0)
+            {
+                moves.emplace_back(x - 1, y + 1);
+            }
+            if (!must_take && x < 7 && board[y + 1][x + 1] == 0)
+            {
+                moves.emplace_back(x + 1, y + 1);
+            }
         }
     }
 
@@ -234,6 +241,7 @@ void event_manager::possible_moves(bool first_player)
     {
         int mx = move.first;
         int my = move.second;
+        std::cout << mx << "  " << my << std::endl;
 
         SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); // Green color
 
