@@ -18,9 +18,12 @@ void state::init_game_state(bool first_player)
     }
 }
 
-void state::update_game_state(int next_x, int next_y, int prev_x, int prev_y, bool player_move)
+void state::update_game_state(int next_x, int next_y, int prev_x, int prev_y, bool player_move, bool first_player)
 {
     int piece = player_move ? 1 : 2;
+
+    int x = abs(next_x - prev_x);
+    int y = abs(next_y - prev_y);
 
     game_state[prev_x][prev_y] = 0;
     game_state[next_x][next_y] = piece;
@@ -34,5 +37,32 @@ void state::update_game_state(int next_x, int next_y, int prev_x, int prev_y, bo
 
         // Update the game state to remove the jumped-over piece
         game_state[jumped_x][jumped_y] = 0;
+    }
+    check_queens(x, y, first_player);
+}
+
+void state::check_queens(int x, int y, bool first_player)
+{
+    int last_row_black;
+    int last_row_white;
+
+    if (first_player)
+    {
+        last_row_white = 7;
+        last_row_black = 0;
+    }
+    else
+    {
+        last_row_white = 0;
+        last_row_black = 7;
+    }
+
+    for (int col = 0; col < 8; col++)
+    {
+        if (game_state[last_row_black][col] == 1)
+            game_state[last_row_black][col] = 3;
+
+        if (game_state[last_row_white][col] == 2)
+            game_state[last_row_white][col] = 4;
     }
 }
