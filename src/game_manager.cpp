@@ -41,6 +41,8 @@ void game_manager::game_loop()
             game_board.render_game_state();
             event_manager.events(done, reset, first_player);
             SDL_RenderPresent(renderer);
+            
+            SDL_Delay(100);
         }
     }
 
