@@ -25,5 +25,14 @@ void state::update_game_state(int next_x, int next_y, int prev_x, int prev_y, bo
     game_state[prev_x][prev_y] = 0;
     game_state[next_x][next_y] = piece;
 
+    // Check if a piece has jumped over an opponent's piece
+    if (abs(next_x - prev_x) == 2 && abs(next_y - prev_y) == 2)
+    {
+        // Calculate the x and y coordinates of the jumped-over piece
+        int jumped_x = (next_x + prev_x) / 2;
+        int jumped_y = (next_y + prev_y) / 2;
 
+        // Update the game state to remove the jumped-over piece
+        game_state[jumped_x][jumped_y] = 0;
+    }
 }
