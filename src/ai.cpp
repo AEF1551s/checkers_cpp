@@ -99,51 +99,117 @@ void ai::get_movable_pieces(bool player_move, bool first_player)
             }
         }
     }
-    // for (const auto &current_piece : movable_pieces)
-    // {
-    //     // Accessing possible_moves vector values for current_piece
-    //     std::cout << "Possible moves for piece at (" << current_piece.x << ", " << current_piece.y << "): ";
-    //     for (const auto &move : current_piece.possible_moves)
-    //     {
-    //         std::cout << "(" << move.first << ", " << move.second << ") ";
-    //     }
-    //     std::cout << std::endl;
-    // }
+
+    for (const auto &current_piece : movable_pieces)
+    {
+        // Accessing possible_moves vector values for current_piece
+        for (const auto &move : current_piece.possible_moves)
+        {
+            create_possible_states(move.first, move.second, current_piece.x, current_piece.y, player_move, first_player);
+        }
+    }
 }
 
-void ai::create_possible_states()
+void ai::create_possible_states(int next_x, int next_y, int prev_x, int prev_y, bool player_move, bool first_player)
 {
-    // Create a temporary copy of the game state
-    int temp_board[8][8];
-    memcpy(temp_board, state::game_state, sizeof(state::game_state));
+    // Create a temporary copy of the current game state
 
-    // // Loop through each movable piece
-    // for (const piece &p : movable_pieces)
-    // {
-    //     int player = p.value;
-    //     int x = p.x;
-    //     int y = p.y;
+    memcpy(current_game_state, state::game_state, sizeof(state::game_state));
 
-    //     // Loop through each possible move for the current piece
-    //     for (const std::pair<int, int> &move : p.possible_moves)
-    //     {
-    //         int new_x = move.first;
-    //         int new_y = move.second;
+    int piece = player_move ? 1 : 2;
 
-    //         // Update the temporary game state with the current move
-    //         temp_board[y][x] = 0;
-    //         temp_board[new_y][new_x] = player;
+    int x = abs(next_x - prev_x);
+    int y = abs(next_y - prev_y);
 
-    //         // Create a new possible state with the updated game state and player
-    //         int(*new_state)[8] = new int[8][8];
-    //         memcpy(new_state, temp_board, sizeof(temp_board));
+    current_game_state[prev_x][prev_y] = 0;
+    current_game_state[next_x][next_y] = piece;
 
-    //         possible_states new_possible_state;
-    //         new_possible_state.states.emplace_back(new_state);
-    //         new_possible_state.player = player;
+    // Check if a piece has jumped over an opponent's piece
+    if (abs(next_x - prev_x) == 2 && abs(next_y - prev_y) == 2)
+    {
+        // Calculate the x and y coordinates of the jumped-over piece
+        int jumped_x = (next_x + prev_x) / 2;
+        int jumped_y = (next_y + prev_y) / 2;
 
-    //         // Add the new possible state to the all_states vector
-    //         all_states.states.emplace_back(new_possible_state);
-    //     }
-    // }
+        // Update the game state to remove the jumped-over piece
+        current_game_state[jumped_x][jumped_y] = 0;
+    }
+    // check_queens(x, y, first_player);
+
+    // Create a new possible state with the updated game state
+    possible_state new_state;
+    memcpy(new_state.state, current_game_state, sizeof(current_game_state));
+
+    new_state.value = value_state(new_state.state, first_player);
+    // new_state.win
+    new_state.player = piece; // min max
+
+    // Add the new possible state to the list of all possible states
+    all_possible_states.push_back(new_state);
+}
+
+bool ai::check_win(int state[8][8], bool first_player)
+{
+    // TODO: check win
+    return false;
+}
+
+int ai::value_state(int state[8][8], bool first_player)
+{
+    int value = 0; // Initialize value to 0
+
+    // Loop through the 8x8 array in the game state
+    for (int i = 0; i < 8; i++)
+    {
+        for (int j = 0; j < 8; j++)
+        {
+            int piece = state[i][j]; // Get the piece at current position
+
+            if (first_player) // If first player is true, update scores for black and white pieces
+            {
+                if (piece == 1) // Black piece
+                {
+                    value--;   // Decrement value by 1
+                    if (i < 4) // If black piece is closer to opponent's side
+                    {
+                        value -= 2; // Decrement value by 2
+                    }
+                }
+                else if (piece == 2) // White piece
+                {
+                    value++;   // Increment value by 1
+                    if (i > 3) // If white piece is closer to player's side
+                    {
+                        value += 2; // Increment value by 2
+                    }
+                }
+            }
+            else // If first player is false, update scores for white and black pieces
+            {
+                if (piece == 1) // White piece
+                {
+                    value--;   // Decrement value by 1
+                    if (i > 3) // If white piece is closer to opponent's side
+                    {
+                        value -= 2; // Decrement value by 2
+                    }
+                }
+                else if (piece == 2) // Black piece
+                {
+                    value++;   // Increment value by 1
+                    if (i < 4) // If black piece is closer to player's side
+                    {
+                        value += 2; // Increment value by 2
+                    }
+                }
+            }
+        }
+    }
+
+    return value; // Return the calculated value
+}
+
+void ai::create_game_tree(bool first_player)
+{
+
 }
