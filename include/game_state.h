@@ -2,10 +2,18 @@
 #define GAME_STATE_H
 
 #include "templates.h"
+#include "tree.h"
 #include <stdexcept>
 
 namespace state
 {
+
+    // Define a struct to represent the game state
+    struct game_state
+    {
+        // Define your game state variables here
+    };
+
     extern int game_state[8][8];
 
     void init_game_state(bool first_player);

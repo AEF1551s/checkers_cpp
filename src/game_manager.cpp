@@ -1,6 +1,6 @@
 #include "game_manager.h"
-
 #include <iostream>
+
 int game_manager::game_state[8][8];
 
 game_manager::game_manager(SDL_Window &window, SDL_Renderer &renderer)
@@ -13,8 +13,9 @@ void game_manager::game_loop()
 {
     bool player_move;
     // Create nessecery objects for game_loop
+    ai ai_player;
     game_window game_window(*window, *renderer);
-    event_manager event_manager(*window, *renderer, player_move);
+    event_manager event_manager(*window, *renderer, player_move, ai_player);
     game_board game_board(*window, *renderer);
 
     SDL_bool done = SDL_FALSE;

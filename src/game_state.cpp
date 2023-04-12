@@ -38,7 +38,7 @@ void state::update_game_state(int next_x, int next_y, int prev_x, int prev_y, bo
         // Update the game state to remove the jumped-over piece
         game_state[jumped_x][jumped_y] = 0;
     }
-    check_queens(x, y, first_player);
+    // check_queens(x, y, first_player);
 }
 
 void state::check_queens(int x, int y, bool first_player)

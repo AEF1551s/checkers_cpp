@@ -18,6 +18,7 @@ void game_board::render_game_state()
     {
         for (int j = 0; j < 8; j++)
         {
+            //Rendered with j and i switched, because j acts as y axis and i as x axis not rows and columns
             SDL_Rect piece_rect = {j * 80, i * 80, 80, 80};
             int piece = state::game_state[i][j];
             switch (piece)
