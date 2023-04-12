@@ -15,9 +15,8 @@ public:
     int game_state[8][8];              // Game state
     int alpha, beta;
     int state_value;
-    static bool min;
-
-    tree_node(int _data, int _alpha, int _beta, const int _game_state[8][8]);
+    bool min, max;
+    tree_node(int alpha, int beta, int state_value, bool min, bool max, int game_state[8][8]);
     ~tree_node();
 };
 
@@ -36,7 +35,7 @@ public:
     int get_size() const;
 
     // Function to insert a node as a child of the given parent node with alpha, beta, and game_state values
-    void insert(tree_node *parent, int data, int alpha, int beta, const int game_state[8][8]);
+    void insert(tree_node *parent, int alpha, int beta, int state_value, bool min, bool max, int game_state[8][8]);
 
 private:
     tree_node *root; // Pointer to the root node
