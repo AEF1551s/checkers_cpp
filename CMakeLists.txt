@@ -17,6 +17,8 @@ set(SOURCES
     src/game_manager.cpp
     src/texture_manager.cpp
     src/game_state.cpp
+    src/tree.cpp
+    src/ai.cpp
 )
 
 # Add an executable with the above sources
