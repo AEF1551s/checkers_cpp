@@ -18,19 +18,20 @@ void ai::get_movable_pieces(bool player_move, bool first_player)
     int player = (player_move == false) ? 2 : 1;
 
     // std::cout << player << std::endl;
-    for (int i = 0; i < 8; ++i)
+
+    for (int x = 0; x < 8; ++x)
     {
-        for (int j = 0; j < 8; ++j)
+        for (int y = 0; y < 8; ++y)
         {
             // Check if the piece at the current position is movable
-            if (board[i][j] == player)
+            if (board[x][y] == player)
             {
-                // When checking game state, i is row, and j is column. x is row, y is collumn. When rendering x is column, and y is row such as axis
+                // When checking game state, x is row, and y is column. x is row, y is column when rendering.
                 piece current_piece;
                 current_piece.value = player;
-                current_piece.x = i;
-                current_piece.y = j;
-                int opponent, x, y;
+                current_piece.x = x;
+                current_piece.y = y;
+                int opponent;
                 bool must_take = false;
 
                 int temp = 1;
@@ -40,83 +41,94 @@ void ai::get_movable_pieces(bool player_move, bool first_player)
                 }
 
                 opponent = (player == 1) ? 2 : 1;
-                // std::cout << player <<" "<< opponent<< std::endl;
-
-                // FIXME: Change x and y, for better readabilitty
-                // y = i;
-                // x = j;
-                x = i;
-                y = j;
 
                 // Calculate the possible moves for the selected piece
                 if (player == temp)
                 {
                     if (y > 0)
                     {
-                        // Check if opponent is in way. Left and right
-                        if (y > 1 && x > 1 && board[y - 1][x - 1] == opponent && board[y - 2][x - 2] == 0)
+                        // Check if opponent is in the way. Left and right
+                        if (y > 1 && x > 1 && board[x - 1][y - 1] == opponent && board[x - 2][y - 2] == 0)
                         {
                             current_piece.possible_moves.emplace_back(x - 2, y - 2);
                             must_take = true;
                         }
-                        if (y > 1 && x < 6 && board[y - 1][x + 1] == opponent && board[y - 2][x + 2] == 0)
+                        if (y > 1 && x < 6 && board[x - 1][y + 1] == opponent && board[x - 2][y + 2] == 0)
                         {
-                            current_piece.possible_moves.emplace_back(x + 2, y - 2);
+                            current_piece.possible_moves.emplace_back(x - 2, y + 2);
                             must_take = true;
                         }
-                        // Check UP diagnally left and right.
-                        if (!must_take && x > 0 && board[y - 1][x - 1] == 0)
+                        // Check UP diagonally left and right.
+                        if (!must_take && x > 0 && board[x - 1][y - 1] == 0)
                         {
                             current_piece.possible_moves.emplace_back(x - 1, y - 1);
                         }
-                        if (!must_take && x < 7 && board[y - 1][x + 1] == 0)
+                        if (!must_take && x > 0 && board[x - 1][y + 1] == 0)
                         {
-                            current_piece.possible_moves.emplace_back(x + 1, y - 1);
+                            current_piece.possible_moves.emplace_back(x - 1, y + 1);
                         }
                     }
                 }
                 else
                 {
-                    // Check if opponent is in way. Left and right
-                    if (y < 6 && x > 1 && board[y + 1][x - 1] == opponent && board[y + 2][x - 2] == 0)
+                    if (y < 6)
                     {
-                        current_piece.possible_moves.emplace_back(x - 2, y + 2);
-                        must_take = true;
-                    }
-                    if (y < 6 && x < 6 && board[y + 1][x + 1] == opponent && board[y + 2][x + 2] == 0)
-                    {
-                        current_piece.possible_moves.emplace_back(x + 2, y + 2);
-                        must_take = true;
-                    }
-                    // Check DOWN diagnally left and right.
-                    if (y < 7)
-                    {
-                        if (!must_take && x > 0 && board[y + 1][x - 1] == 0)
+                        // Check if opponent is in the way. Left and right
+                        if (y < 6 && x > 1 && board[x + 1][y - 1] == opponent && board[x + 2][y - 2] == 0)
                         {
-                            current_piece.possible_moves.emplace_back(x - 1, y + 1);
+                            current_piece.possible_moves.emplace_back(x + 2, y - 2);
+                            must_take = true;
                         }
-                        if (!must_take && x < 7 && board[y + 1][x + 1] == 0)
+                        if (y < 6 && x < 6 && board[x + 1][y + 1] == opponent && board[x + 2][y + 2] == 0)
+                        {
+                            current_piece.possible_moves.emplace_back(x + 2, y + 2);
+                            must_take = true;
+                        }
+                        // Check DOWN diagonally left and right.
+                        if (!must_take && x < 7 && board[x + 1][y - 1] == 0)
+                        {
+                            current_piece.possible_moves.emplace_back(x + 1, y - 1);
+                        }
+                        if (!must_take && x < 7 && board[x + 1][y + 1] == 0)
                         {
                             current_piece.possible_moves.emplace_back(x + 1, y + 1);
                         }
+
+                        // for (const auto &move : current_piece.possible_moves)
+                        // {
+                        // std::cout << "Possible Move: (" << move.first << ", " << move.second << ")" << std::endl;
+                        //     // state::update_game_state(move.second, move.first, current_piece.y, current_piece.x, player_move, first_player);
+                        //     // std::cout << "Current piece x : y " << current_piece.x << " : " << current_piece.y << std::endl;
+                        //     // std::cout << "possible moves" << move.first << " : " << move.second << std::endl;
+                        // }
+                        // // state::update_game_state(3,0, 2,1,player_move, first_player);
                     }
                 }
                 movable_pieces.emplace_back(current_piece);
-
             }
         }
     }
+    for (const auto &current_piece : movable_pieces)
+    {
+        // Accessing possible_moves vector values for current_piece
+        std::cout << "Possible moves for piece at (" << current_piece.x << ", " << current_piece.y << "): ";
+        for (const auto &move : current_piece.possible_moves)
+        {
+            std::cout << "(" << move.first << ", " << move.second << ") ";
+        }
+        std::cout << std::endl;
+    }
 }
-                // for (const auto &move : current_piece.possible_moves)
-                // {
-                //     // std::cout << "Possible Move: (" << move.first << ", " << move.second << ")" << std::endl;
-                //     // state::update_game_state(move.second, move.first, current_piece.y, current_piece.x, player_move, first_player);
-                //     std::cout << "Current piece x : y " << current_piece.x << " : " << current_piece.y << std::endl;
-                //     // std::cout << "possible moves" << move.first << " : " << move.second << std::endl;
-                // }
-                // // state::update_game_state(3,0, 2,1,player_move, first_player);
+// for (const auto &move : current_piece.possible_moves)
+// {
+//     // std::cout << "Possible Move: (" << move.first << ", " << move.second << ")" << std::endl;
+//     // state::update_game_state(move.second, move.first, current_piece.y, current_piece.x, player_move, first_player);
+//     std::cout << "Current piece x : y " << current_piece.x << " : " << current_piece.y << std::endl;
+//     // std::cout << "possible moves" << move.first << " : " << move.second << std::endl;
+// }
+// // state::update_game_state(3,0, 2,1,player_move, first_player);
 
-                // // std::cout << current_piece.x << " : " << current_piece.y << std::endl; //correct
+// // std::cout << current_piece.x << " : " << current_piece.y << std::endl; //correct
 
 void ai::create_possible_states()
 {
